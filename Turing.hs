@@ -7,6 +7,7 @@ module Turing
 import Data.HashMap.Lazy ( HashMap(..)
                          , (!)
                          )
+
 import Tape ( Action(..)
             , Tape(..)
             , fromString
@@ -46,6 +47,11 @@ createInstance machine input = MachineInstance machine
 isFinalState :: String -> TuringMachine -> Bool
 isFinalState state machine = elem state (finals machine)
 
+-- Tell if an instance is in a final state
+isInstanceInFinalState :: MachineInstance -> Bool
+isInstanceInFinalState minstance
+    = isFinalState (instanceState minstance) (turingMachine minstance)
+
 -- Modify an instance by applying a function to the state
 modifyState :: (String -> String) -> MachineInstance -> MachineInstance
 modifyState f (MachineInstance machine currentState currentTape)
@@ -74,3 +80,11 @@ nextTape minstance
           direction = action taction
           newChar = write taction
       in ((moveHead direction) . (writeTape newChar)) currentTape
+
+-- Return the next instance
+nextInstance :: MachineInstance -> MachineInstance
+nextInstance minstance
+    | isInstanceInFinalState minstance = minstance
+    | otherwise = ((modifyState stateFunction) . (modifyTape tapeFunction)) minstance
+    where stateFunction = \_ -> nextState minstance
+          tapeFunction = \_ -> nextTape minstance
