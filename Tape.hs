@@ -1,10 +1,11 @@
 module Tape
 ( Action(..)
 , Tape(..)
+, fromString
 , moveHead
 , moveLeft
 , moveRight
-, newTape
+, representation
 ) where
 
 
@@ -15,9 +16,13 @@ data Tape = Tape { tapeContent :: [Char]
                  , blankCharacter :: Char
                  } deriving (Show)
 
+-- Create a tape from a blank character and an input string
+fromString :: Char -> String -> Tape
+fromString blank input = Tape input 0 blank
+
 -- Create a new tape from a blank character
 newTape :: Char -> Tape
-newTape blankChar = Tape [blankChar] 0 blankChar
+newTape blankChar = fromString blankChar ""
 
 -- Modify a tape by applying a function to the content of a tape
 modifyContent :: ([Char] -> [Char]) -> Tape -> Tape
@@ -86,3 +91,12 @@ replaceIth element index (x:xs) = x:(replaceIth element (index - 1) xs)
 -- Write a char in the tape
 writeTape :: Char -> Tape -> Tape
 writeTape c tape = modifyContent (replaceIth c (tapeHead tape)) tape
+
+-- Highlight the current char
+highlightCurrent :: [Char] -> Int -> [Char]
+highlightCurrent (c:cs) 0 = "<[" ++ [c] ++ "]>" ++ cs
+highlightCurrent (c:cs) n = c:(highlightCurrent cs (n - 1))
+
+-- Return the representation of a tape
+representation :: Tape -> String
+representation (Tape tcontent thead _) = highlightCurrent tcontent thead
