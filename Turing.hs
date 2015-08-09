@@ -1,6 +1,6 @@
 module Turing
 ( Action(..)
-, Transition(..)
+, TransitionAction(..)
 , TuringMachine(..)
 ) where
 
@@ -11,11 +11,12 @@ import Tape ( Action(..)
             )
 
 
-data Transition = Transition { read :: Char
-                             , toState :: String
-                             , write :: Char
-                             , action :: Action
-                             } deriving (Show)
+data TransitionAction = TransitionAction { toState :: String
+                                         , write :: Char
+                                         , action :: Action
+                                         } deriving (Show)
+
+type Transition = HashMap Char TransitionAction
 
 data TuringMachine = TuringMachine { name :: String
                                    , alphabet :: [Char]
@@ -23,7 +24,7 @@ data TuringMachine = TuringMachine { name :: String
                                    , states :: [String]
                                    , initial :: String
                                    , finals :: [String]
-                                   , transitions :: HashMap String [Transition]
+                                   , transitions :: HashMap String Transition
                                    } deriving (Show)
 
 data MachineInstance = MachineInstance { turingMachine :: TuringMachine

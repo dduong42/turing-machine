@@ -5,7 +5,7 @@ import Data.HashMap.Lazy ( HashMap(..)
                          )
 
 import Turing ( TuringMachine(..)
-              , Transition(..)
+              , TransitionAction(..)
               , Action(..)
               )
 
@@ -18,18 +18,18 @@ unarySub = TuringMachine
     ["scanright", "eraseone", "subone", "skip", "HALT"]
     "scanright"
     ["HALT"]
-    (fromList [ ("scanright", [ Transition ' ' "scanright" ' ' MoveRight
-                              , Transition '1' "scanright" '1' MoveRight
-                              , Transition '-' "scanright" '-' MoveRight
-                              , Transition '=' "eraseone" ' ' MoveLeft
-                              ])
-              , ("eraseone",  [ Transition '1' "subone" '=' MoveLeft
-                              , Transition '-' "HALT" ' ' MoveLeft
-                              ])
-              , ("subone",    [ Transition '1' "subone" '1' MoveLeft
-                              , Transition '-' "skip" '-' MoveLeft
-                              ])
-              , ("skip",      [ Transition ' ' "skip" ' ' MoveLeft
-                              , Transition '1' "scanright" ' ' MoveRight
-                              ])
+    (fromList [ ("scanright", fromList [ (' ', (TransitionAction "scanright" ' ' MoveRight))
+                                       , ('1', (TransitionAction "scanright" '1' MoveRight))
+                                       , ('-', (TransitionAction "scanright" '-' MoveRight))
+                                       , ('=', (TransitionAction "eraseone" ' ' MoveLeft))
+                                       ])
+              , ("eraseone",  fromList [ ('1', (TransitionAction "subone" '=' MoveLeft))
+                                       , ('-', (TransitionAction "HALT" ' ' MoveLeft))
+                                       ])
+              , ("subone",    fromList [ ('1', (TransitionAction "subone" '1' MoveLeft))
+                                       , ('-', (TransitionAction "skip" '-' MoveLeft))
+                                       ])
+              , ("skip",      fromList [ (' ', (TransitionAction "skip" ' ' MoveLeft))
+                                       , ('1', (TransitionAction "scanright" ' ' MoveRight))
+                                       ])
               ])
