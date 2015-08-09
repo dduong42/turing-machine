@@ -1,0 +1,91 @@
+{
+  "alphabet": [
+    "1",
+    " ",
+    "-",
+    "="
+  ],
+  "blank": " ",
+  "finals": [
+    "HALT"
+  ],
+  "initial": "scanright",
+  "name": "unary_sub",
+  "states": [
+    "scanright",
+    "eraseone",
+    "subone",
+    "skip",
+    "HALT"
+  ],
+  "transitions": {
+    "eraseone": [
+      {
+        "action": "LEFT",
+        "read": "1",
+        "to_state": "subone",
+        "write": "="
+      },
+      {
+        "action": "LEFT",
+        "read": "-",
+        "to_state": "HALT",
+        "write": " "
+      }
+    ],
+    "scanright": [
+      {
+        "action": "RIGHT",
+        "read": " ",
+        "to_state": "scanright",
+        "write": " "
+      },
+      {
+        "action": "RIGHT",
+        "read": "1",
+        "to_state": "scanright",
+        "write": "1"
+      },
+      {
+        "action": "RIGHT",
+        "read": "-",
+        "to_state": "scanright",
+        "write": "-"
+      },
+      {
+        "action": "LEFT",
+        "read": "=",
+        "to_state": "eraseone",
+        "write": " "
+      }
+    ],
+    "skip": [
+      {
+        "action": "LEFT",
+        "read": " ",
+        "to_state": "skip",
+        "write": " "
+      },
+      {
+        "action": "RIGHT",
+        "read": "1",
+        "to_state": "scanright",
+        "write": " "
+      }
+    ],
+    "subone": [
+      {
+        "action": "LEFT",
+        "read": "1",
+        "to_state": "subone",
+        "write": "1"
+      },
+      {
+        "action": "LEFT",
+        "read": "-",
+        "to_state": "skip",
+        "write": "-"
+      }
+    ]
+  }
+}
