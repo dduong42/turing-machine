@@ -5,6 +5,7 @@ module Tape
 , moveHead
 , moveLeft
 , moveRight
+, readTape
 , representation
 ) where
 

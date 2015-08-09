@@ -4,10 +4,13 @@ module Turing
 , TuringMachine(..)
 ) where
 
-import Data.HashMap.Lazy (HashMap(..))
+import Data.HashMap.Lazy ( HashMap(..)
+                         , (!)
+                         )
 import Tape ( Action(..)
             , Tape(..)
             , fromString
+            , readTape
             )
 
 
@@ -26,8 +29,8 @@ data TuringMachine = TuringMachine { name :: String
                                    } deriving (Show)
 
 data MachineInstance = MachineInstance { turingMachine :: TuringMachine
-                                       , state :: String
-                                       , tape :: Tape
+                                       , machineState :: String
+                                       , machineTape :: Tape
                                        } deriving (Show)
 
 
@@ -48,3 +51,10 @@ modifyState f (MachineInstance machine mstate mtape) = MachineInstance machine (
 -- Modify an instance by applying a function to the tape
 modifyTape :: (Tape -> Tape) -> MachineInstance -> MachineInstance
 modifyTape f (MachineInstance machine mstate mtape) = MachineInstance machine mstate (f mtape)
+
+-- Return the next state of the machine instance
+nextState :: MachineInstance -> String
+nextState (MachineInstance machine mstate mtape)
+    = let currentChar = readTape mtape
+          taction = (transitions machine) ! (mstate, currentChar)
+      in toState taction
