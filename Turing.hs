@@ -16,15 +16,13 @@ data TransitionAction = TransitionAction { toState :: String
                                          , action :: Action
                                          } deriving (Show)
 
-type Transition = HashMap Char TransitionAction
-
 data TuringMachine = TuringMachine { name :: String
                                    , alphabet :: [Char]
                                    , blank :: Char
                                    , states :: [String]
                                    , initial :: String
                                    , finals :: [String]
-                                   , transitions :: HashMap String Transition
+                                   , transitions :: HashMap (String, Char) TransitionAction
                                    } deriving (Show)
 
 data MachineInstance = MachineInstance { turingMachine :: TuringMachine
