@@ -1,4 +1,7 @@
-module Example (unarySub) where
+module Example
+( input
+, unarySub
+) where
 
 import Data.HashMap.Lazy ( HashMap(..)
                          , fromList
@@ -29,3 +32,7 @@ unarySub = TuringMachine
               , (("skip", ' '), (TransitionAction "skip" ' ' MoveLeft))
                ,(("skip", '1'), (TransitionAction "scanright" ' ' MoveRight))
               ])
+
+
+input :: String
+input = "111-11="
