@@ -10,7 +10,9 @@ import Data.HashMap.Lazy ( HashMap(..)
 import Tape ( Action(..)
             , Tape(..)
             , fromString
+            , moveHead
             , readTape
+            , writeTape
             )
 
 
@@ -29,8 +31,8 @@ data TuringMachine = TuringMachine { name :: String
                                    } deriving (Show)
 
 data MachineInstance = MachineInstance { turingMachine :: TuringMachine
-                                       , machineState :: String
-                                       , machineTape :: Tape
+                                       , instanceState :: String
+                                       , instanceTape :: Tape
                                        } deriving (Show)
 
 
@@ -63,3 +65,12 @@ actionForInstance (MachineInstance machine currentState currentTape)
 -- Return the next state of the machine instance
 nextState :: MachineInstance -> String
 nextState = toState . actionForInstance
+
+-- Return the next tape of the machine instance
+nextTape :: MachineInstance -> Tape
+nextTape minstance
+    = let taction = actionForInstance minstance
+          currentTape = instanceTape minstance
+          direction = action taction
+          newChar = write taction
+      in ((moveHead direction) . (writeTape newChar)) currentTape

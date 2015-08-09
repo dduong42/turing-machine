@@ -7,6 +7,7 @@ module Tape
 , moveRight
 , readTape
 , representation
+, writeTape
 ) where
 
 
