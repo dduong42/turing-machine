@@ -2,17 +2,21 @@ module Turing
 ( Action(..)
 , TransitionAction(..)
 , TuringMachine(..)
+, runMachine
 ) where
 
 import Data.HashMap.Lazy ( HashMap(..)
                          , (!)
                          )
 
+import Data.List (intercalate)
+
 import Tape ( Action(..)
             , Tape(..)
             , fromString
             , moveHead
             , readTape
+            , representation
             , writeTape
             )
 
@@ -88,3 +92,21 @@ nextInstance minstance
     | otherwise = ((modifyState stateFunction) . (modifyTape tapeFunction)) minstance
     where stateFunction = \_ -> nextState minstance
           tapeFunction = \_ -> nextTape minstance
+
+-- Return the representation of an instance (it's the representation of its tape)
+instanceRepresentation :: MachineInstance -> String
+instanceRepresentation = representation . instanceTape
+
+-- Run an instance
+runInstance :: MachineInstance -> [MachineInstance]
+runInstance minstance
+    | isInstanceInFinalState minstance = [minstance]
+    | otherwise = minstance:((runInstance . nextInstance) minstance)
+
+-- Return what will be displayed by the program
+instanceOutput :: MachineInstance -> String
+instanceOutput = intercalate "\n" . (fmap instanceRepresentation) . runInstance
+
+-- Run a turing machine
+runMachine :: TuringMachine -> String -> String
+runMachine tmachine input = instanceOutput (createInstance tmachine input)

@@ -10,6 +10,7 @@ import Data.HashMap.Lazy ( HashMap(..)
 import Turing ( TuringMachine(..)
               , TransitionAction(..)
               , Action(..)
+              , runMachine
               )
 
 
@@ -33,6 +34,8 @@ unarySub = TuringMachine
                ,(("skip", '1'), (TransitionAction "scanright" ' ' MoveRight))
               ])
 
-
 input :: String
 input = "111-11="
+
+main :: IO ()
+main = putStrLn (runMachine unarySub input)
