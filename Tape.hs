@@ -72,3 +72,16 @@ moveRight = moveHead MoveRight
 -- Move the tape to the left
 moveLeft :: Tape -> Tape
 moveLeft = moveHead MoveLeft
+
+-- Read the current element pointed by the head
+readTape :: Tape -> Char
+readTape tape = tapeContent tape !! (tapeHead tape)
+
+-- Replace the ith element of a list
+replaceIth :: a -> Int -> [a] -> [a]
+replaceIth element 0 (x:xs) = element:xs
+replaceIth element index (x:xs) = x:(replaceIth element (index - 1) xs)
+
+-- Write a char in the tape
+writeTape :: Char -> Tape -> Tape
+writeTape c tape = modifyContent (replaceIth c (tapeHead tape)) tape
