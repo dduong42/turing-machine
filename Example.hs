@@ -1,3 +1,5 @@
+module Example (unarySub) where
+
 import Data.HashMap.Lazy ( HashMap(..)
                          , fromList
                          )
