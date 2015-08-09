@@ -46,15 +46,20 @@ isFinalState state machine = elem state (finals machine)
 
 -- Modify an instance by applying a function to the state
 modifyState :: (String -> String) -> MachineInstance -> MachineInstance
-modifyState f (MachineInstance machine mstate mtape) = MachineInstance machine (f mstate) mtape
+modifyState f (MachineInstance machine currentState currentTape)
+    = MachineInstance machine (f currentState) currentTape
 
 -- Modify an instance by applying a function to the tape
 modifyTape :: (Tape -> Tape) -> MachineInstance -> MachineInstance
-modifyTape f (MachineInstance machine mstate mtape) = MachineInstance machine mstate (f mtape)
+modifyTape f (MachineInstance machine currentState currentTape)
+    = MachineInstance machine currentState (f currentTape)
+
+-- Return the TransitionAction associated with the MachineInstance
+actionForInstance :: MachineInstance -> TransitionAction
+actionForInstance (MachineInstance machine currentState currentTape)
+    = (transitions machine) ! (currentState, currentChar)
+    where currentChar = readTape currentTape
 
 -- Return the next state of the machine instance
 nextState :: MachineInstance -> String
-nextState (MachineInstance machine mstate mtape)
-    = let currentChar = readTape mtape
-          taction = (transitions machine) ! (mstate, currentChar)
-      in toState taction
+nextState = toState . actionForInstance
