@@ -10,6 +10,9 @@ module Tape
 , writeTape
 ) where
 
+import Common ( applyIf
+              , replaceIth
+              )
 
 data Action = MoveLeft | MoveRight deriving (Show)
 
@@ -63,11 +66,6 @@ extendFunction :: Action -> Char -> ([Char] -> [Char])
 extendFunction MoveLeft blank = extendLeft blank
 extendFunction MoveRight blank = extendRight blank
 
--- Apply a function to an argument if a condition is True, otherwise return
--- the original value
-applyIf :: (a -> a) -> Bool -> a -> a
-applyIf f cond x = if cond then f x else x
-
 -- Move the head to a specific direction
 moveHead :: Action -> Tape -> Tape
 moveHead action tape = (modifyHead (newHead action) . modifyContent contentFunction) tape
@@ -84,11 +82,6 @@ moveLeft = moveHead MoveLeft
 -- Read the current element pointed by the head
 readTape :: Tape -> Char
 readTape tape = tapeContent tape !! (tapeHead tape)
-
--- Replace the ith element of a list
-replaceIth :: a -> Int -> [a] -> [a]
-replaceIth element 0 (x:xs) = element:xs
-replaceIth element index (x:xs) = x:(replaceIth element (index - 1) xs)
 
 -- Write a char in the tape
 writeTape :: Char -> Tape -> Tape
