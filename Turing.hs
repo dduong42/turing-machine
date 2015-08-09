@@ -5,9 +5,8 @@ module Turing
 ) where
 
 import Data.HashMap.Lazy (HashMap(..))
+import Tape(Action(..))
 
-
-data Action = MoveLeft | MoveRight deriving (Show)
 
 data Transition = Transition { read :: Char
                              , toState :: String

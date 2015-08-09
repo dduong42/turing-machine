@@ -1,13 +1,14 @@
 module Tape
-( Tape(..)
+( Action(..)
+, Tape(..)
 , moveHead
 , moveLeft
 , moveRight
 , newTape
 ) where
 
-import Turing (Action(..))
 
+data Action = MoveLeft | MoveRight deriving (Show)
 
 data Tape = Tape { tapeContent :: [Char]
                  , tapeHead :: Int
